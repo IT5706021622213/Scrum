@@ -1,37 +1,66 @@
 <template>
   <div class="content">
     <div>
-      <table>
-        <tr style="background-color: #00D1B2">
-          <td width="30%" height="100%"><font color="#FFFFFF" size="4"><center>To Do</center></font></td>
-          <td width="30%" height="100%"><font color="#FFFFFF" size="4"><center>In progress</center></font></td>
-          <td width="30%" height="100%"><font color="#FFFFFF" size="4"><center>Done</center></font></td>
-        </tr>
-        <tr style="background-color: #FFFFFF">
-          <td>
-            <div v-for = "message in todo">
-              <div v-if = "message.status == 'ยังไม่ได้ทำ'" class="notification is-danger">
-                &nbsp;&nbsp;&nbsp;{{ message.msg }}
+      <div class="col-xs-4 col-md-4 col-lg-4">
+        <table>
+          <tr style="background-color: #00D1B2">
+            <td width="30%" height="100%"><font color="#FFFFFF" size="4"><center>To Do</center></font></td>
+          </tr>
+        </table>
+        <div class="tbl-content">
+          <table>
+            <tr style="background-color: #FFFFFF">
+              <div v-for = "message in todo">
+                <div v-if = "message.status == 'ยังไม่ได้ทำ'" class="notification is-danger">
+                  &nbsp;&nbsp;&nbsp;{{ message.msg }}
+                </div>
               </div>
-            </div>
-          </td>
-          <td>
-            <div v-for = "progress in progress">
-              <div v-if = "progress.status == 'กำลังทำ'" class="notification is-warning">
-                &nbsp;&nbsp;&nbsp;{{ progress.msg }}
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-xs-4 col-md-4 col-lg-4">
+        <table>
+          <tr style="background-color: #00D1B2">
+            <td width="30%" height="100%"><font color="#FFFFFF" size="4"><center>In progress</center></font></td>
+          </tr>
+        </table>
+        <div class="tbl-content">
+          <table>
+            <tr style="background-color: #FFFFFF">
+              <div v-for = "progress in progress">
+                <div v-if = "progress.status == 'กำลังทำ'" class="notification is-warning">
+                  &nbsp;&nbsp;&nbsp;{{ progress.msg }}
+                </div>
+                <br>
+                Name :
               </div>
-            </div>
-          </td>
-          <td>
-            <div v-for = "dodone in done">
-              <div v-if = "dodone.status == 'ทำเสร็จแล้ว'" class="notification is-success">
-                &nbsp;&nbsp;&nbsp;{{ dodone.msg }}
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="col-xs-4 col-md-4 col-lg-4">
+        <table>
+          <tr style="background-color: #00D1B2">
+            <td width="30%" height="100%"><font color="#FFFFFF" size="4"><center>Done</center></font></td>
+          </tr>
+        </table>
+        <div class="tbl-content">
+          <table>
+            <tr style="background-color: #FFFFFF">
+              <div v-for = "dodone in done">
+                <div v-if = "dodone.status == 'ทำเสร็จแล้ว'" class="notification is-success">
+                  &nbsp;&nbsp;&nbsp;{{ dodone.msg }}
+                </div>
               </div>
-            </div>
-          </td>
-        </tr>
-      </table>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
+    <h1>Fixed Table header</h1>
 
   </div>
 </template>
@@ -88,7 +117,7 @@ export default {
   },
   created () {
     let that = this
-    axios.get('https://graph.facebook.com/138501810233037?fields=feed&access_token=EAACEdEose0cBAHCzbTgeq2mZBuuOmH28lizd8drOZBscqxQd6pMT2iODdSSZAdAySbFTcZACiXhkXQt9s71diPqpkYwYlokCdzP7VNF3jJZBgnuV5jeEQJ9HU5xICAG0zzkL06xi6oj5Dy4y1eK7AMDT8FfigbzfrEwJZCv4AZC2JQmGz9pWSavzv0vQZBWEFzMZD')
+    axios.get('https://graph.facebook.com/138501810233037?fields=feed&access_token=EAACEdEose0cBAOZBeW4sIvVEAW5kJ0WuyRbhLuWbCXJiTFEm0izxB50KmeQVZAp5LHsQcMZCbcWU00ZArVoUIYgHLuBmZCxAZAbB7xZBqDOLAL5mzPKuZCJiKk2GhKcjZBMhOi967wdTyJpvH17J40PoVKpY8bShx7tGZBuMIlMR3ZCXZCK8levCU7jR1NOGXnVsf6UZD')
     .then(response => {
       this.posts = response.data
       // console.log(this.posts.feed.data)
@@ -113,7 +142,7 @@ export default {
         }
       })
     })
-    axios.get('https://graph.facebook.com/138501810233037?fields=feed{comments}&access_token=EAACEdEose0cBAHCzbTgeq2mZBuuOmH28lizd8drOZBscqxQd6pMT2iODdSSZAdAySbFTcZACiXhkXQt9s71diPqpkYwYlokCdzP7VNF3jJZBgnuV5jeEQJ9HU5xICAG0zzkL06xi6oj5Dy4y1eK7AMDT8FfigbzfrEwJZCv4AZC2JQmGz9pWSavzv0vQZBWEFzMZD')
+    axios.get('https://graph.facebook.com/138501810233037?fields=feed{comments}&access_token=EAACEdEose0cBAOZBeW4sIvVEAW5kJ0WuyRbhLuWbCXJiTFEm0izxB50KmeQVZAp5LHsQcMZCbcWU00ZArVoUIYgHLuBmZCxAZAbB7xZBqDOLAL5mzPKuZCJiKk2GhKcjZBMhOi967wdTyJpvH17J40PoVKpY8bShx7tGZBuMIlMR3ZCXZCK8levCU7jR1NOGXnVsf6UZD')
     .then(response => {
       this.comments = response.data
       // console.log(this.comments.feed.data[0].comments.data[0].from.name)
@@ -149,5 +178,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  h1{
+    font-size: 30px;
+    color: #000;
+    text-transform: uppercase;
+    font-weight: 300;
+    text-align: center;
+    margin-bottom: 15px;
+  }
 
+  .tbl-content{
+    height:300px;
+    overflow-x:auto;
+    margin-top: 0px;
+    border: 1px solid rgba(255,255,255,0.3);
+  }
+
+  /* for custom scrollbar for webkit browser*/
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+  ::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
 </style>
