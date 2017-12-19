@@ -31,10 +31,19 @@
             <tr style="background-color: #FFFFFF">
               <div v-for = "progress in progress">
                 <div v-if = "progress.status == 'กำลังทำ'" class="notification is-warning">
+                  <div v-show = "progress.date == datetime">
+                    Status : <font color="green"><b>On time</b></font>
+                    Date : {{ progress.dmy }}
+                  </div>
+                  <div v-show = "progress.date != datetime">
+                    Status : <font color="red"><b>Delay</b></font>
+                    Date : {{ progress.dmy }}
+                  </div>
                   &nbsp;&nbsp;&nbsp;{{ progress.msg }}
+                  <div>
+                    Name : {{ progress.name }}
+                  </div>
                 </div>
-                <br>
-                Name :
               </div>
             </tr>
           </table>
@@ -52,7 +61,19 @@
             <tr style="background-color: #FFFFFF">
               <div v-for = "dodone in done">
                 <div v-if = "dodone.status == 'ทำเสร็จแล้ว'" class="notification is-success">
+                  <div>
+                    Status : <font color="green"><b>{{ dodone.dash }}</b></font>
+                  </div>
+                  <!-- <div v-show = "progress.date == progress.ondelay">
+                    Status : <font color="green"><b>On time</b></font>
+                  </div>
+                  <div v-show = "progress.date != progress.ondelay">
+                    Status : <font color="green"><b>Delay</b></font>
+                  </div> -->
                   &nbsp;&nbsp;&nbsp;{{ dodone.msg }}
+                  <div>
+                    Name : {{ dodone.name }}
+                  </div>
                 </div>
               </div>
             </tr>
@@ -61,7 +82,10 @@
       </div>
     </div>
     <h1>Fixed Table header</h1>
-
+    งานทั้งหมด : {{ count }} <br>
+    To Do : {{ sumtodo }}<br>
+    In Progress : {{ sumprogress }} <br>
+    Done : {{ donecount }}
   </div>
 </template>
 
@@ -84,6 +108,14 @@ export default {
       todoo: [],
       progress: [],
       done: [],
+      datetime: '',
+      testy: 'hello',
+      count: 0,
+      todocount: 0,
+      sumtodo: 0,
+      progresscount: 0,
+      sumprogress: 0,
+      donecount: 0,
       feedid: 0
     }
   },
@@ -107,6 +139,8 @@ export default {
     }
   },
   mounted () {
+    let that = this
+    that.datetime = Date().substr(8, 2)
     setInterval(() => {
       // https://github.com/vuejs/vue/issues/2873
       // Array.prototype.$set/$remove deprecated (use Vue.set or Array.prototype.splice instead)
@@ -117,7 +151,7 @@ export default {
   },
   created () {
     let that = this
-    axios.get('https://graph.facebook.com/138501810233037?fields=feed&access_token=EAACEdEose0cBAOZBeW4sIvVEAW5kJ0WuyRbhLuWbCXJiTFEm0izxB50KmeQVZAp5LHsQcMZCbcWU00ZArVoUIYgHLuBmZCxAZAbB7xZBqDOLAL5mzPKuZCJiKk2GhKcjZBMhOi967wdTyJpvH17J40PoVKpY8bShx7tGZBuMIlMR3ZCXZCK8levCU7jR1NOGXnVsf6UZD')
+    axios.get('https://graph.facebook.com/138501810233037?fields=feed&access_token=EAACEdEose0cBAM9Cszc6VZAtfPaXYBUCeGzuYbSMfbLi1pZAAL8cSBYZBMcoitwoZC4gBdokiSPsitu6l6OOnPfOEBx1mtI4c9KFEEm0Dq0cxmLQ1LjOvmFduMpswVLVPaZAAZBEvAoQUGwlPDdsuhFU6qq3H1iZB4lPVBiZCAZC1bqZCDoaTzbg9wJ5SgxKQre38ZD')
     .then(response => {
       this.posts = response.data
       // console.log(this.posts.feed.data)
@@ -127,13 +161,19 @@ export default {
         if (message.message.substr(0, 5) === '#ToDo') {
           let newmessage = {
             id: message.id,
+            name: '',
             msg: message.message.substr(6),
-            status: 'ยังไม่ได้ทำ'
+            status: 'ยังไม่ได้ทำ',
+            date: '',
+            dmy: '',
+            ondelay: '',
+            dash: ''
           }
           // console.log(comment.id)
           that.todo.push(newmessage)
           that.progress.push(newmessage)
           that.done.push(newmessage)
+          that.count++
           // console.log(that.test.id)
           // that.todo.push(message.message.substr(6))
           // that.todo.push(message.id)
@@ -142,7 +182,7 @@ export default {
         }
       })
     })
-    axios.get('https://graph.facebook.com/138501810233037?fields=feed{comments}&access_token=EAACEdEose0cBAOZBeW4sIvVEAW5kJ0WuyRbhLuWbCXJiTFEm0izxB50KmeQVZAp5LHsQcMZCbcWU00ZArVoUIYgHLuBmZCxAZAbB7xZBqDOLAL5mzPKuZCJiKk2GhKcjZBMhOi967wdTyJpvH17J40PoVKpY8bShx7tGZBuMIlMR3ZCXZCK8levCU7jR1NOGXnVsf6UZD')
+    axios.get('https://graph.facebook.com/138501810233037?fields=feed{comments}&access_token=EAACEdEose0cBAM9Cszc6VZAtfPaXYBUCeGzuYbSMfbLi1pZAAL8cSBYZBMcoitwoZC4gBdokiSPsitu6l6OOnPfOEBx1mtI4c9KFEEm0Dq0cxmLQ1LjOvmFduMpswVLVPaZAAZBEvAoQUGwlPDdsuhFU6qq3H1iZB4lPVBiZCAZC1bqZCDoaTzbg9wJ5SgxKQre38ZD')
     .then(response => {
       this.comments = response.data
       // console.log(this.comments.feed.data[0].comments.data[0].from.name)
@@ -154,16 +194,36 @@ export default {
         // console.log(comment.id)
         comment.comments.data.forEach(function (progress) {
           // console.log(progress.message);
+          // console.log(progress.from.name);
+
+          // comment start
           if (progress.message === '#start') {
             let result = that.todo.find(item => item.id === comment.id)
             result.status = 'กำลังทำ'
+            result.date = progress.created_time.substr(8, 2)
+            result.dmy = progress.created_time.substr(0, 10)
+            result.name = progress.from.name
+            that.progresscount++
+            that.sumprogress = that.progresscount-that.donecount
             that.todo.push(result)
+            // console.log(that.todo)
+            // console.log(that.datetime)
             // console.log(that.test.id)
           }
+          // End comment start
           if (progress.message === '#end') {
             let result = that.todo.find(item => item.id === comment.id)
             result.status = 'ทำเสร็จแล้ว'
+            result.ondelay = progress.created_time.substr(8, 2)
+            if (result.date === result.ondelay) {
+              result.dash = 'On time'
+            }
+            else {
+              result.dash = 'Delay'
+            }
+            that.donecount++
             that.todo.push(result)
+            console.log(that.todo)
             // console.log(that.test.id)
           }
         })
