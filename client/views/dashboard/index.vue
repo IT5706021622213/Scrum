@@ -1,6 +1,7 @@
 <template>
   <div class="content">
     <div>
+      <!-- To Do -->
       <div class="col-xs-4 col-md-4 col-lg-4">
         <table>
           <tr style="background-color: #00D1B2">
@@ -19,7 +20,9 @@
           </table>
         </div>
       </div>
+      <!-- End To Do -->
 
+      <!-- In Progress -->
       <div class="col-xs-4 col-md-4 col-lg-4">
         <table>
           <tr style="background-color: #00D1B2">
@@ -49,7 +52,9 @@
           </table>
         </div>
       </div>
+      <!-- End In Progress -->
 
+      <!-- Done -->
       <div class="col-xs-4 col-md-4 col-lg-4">
         <table>
           <tr style="background-color: #00D1B2">
@@ -60,26 +65,39 @@
           <table>
             <tr style="background-color: #FFFFFF">
               <div v-for = "dodone in done">
-                <div v-if = "dodone.status == 'ทำเสร็จแล้ว'" class="notification is-success">
+                <!-- <div v-if = "dodone.status == 'ทำเสร็จแล้ว'" class="notification is-success">
                   <div>
                     Status : <font color="green"><b>{{ dodone.dash }}</b></font>
-                  </div>
+                  </div> -->
                   <!-- <div v-show = "progress.date == progress.ondelay">
                     Status : <font color="green"><b>On time</b></font>
                   </div>
                   <div v-show = "progress.date != progress.ondelay">
                     Status : <font color="green"><b>Delay</b></font>
                   </div> -->
-                  &nbsp;&nbsp;&nbsp;{{ dodone.msg }}
+                  <!-- &nbsp;&nbsp;&nbsp;{{ dodone.msg }}
                   <div>
                     Name : {{ dodone.name }}
                   </div>
-                </div>
+                </div> -->
+                <article v-if = "dodone.status == 'ทำเสร็จแล้ว'" class="message is-success">
+                  <div class="message-header">
+                    <p>Status : <font color="green"><b>{{ dodone.dash }}</b></font></p>
+                    <button class="delete" aria-label="delete"></button>
+                  </div>
+                  <div class="message-body">
+                    &nbsp;&nbsp;&nbsp;{{ dodone.msg }}
+                    <div>
+                      Name : {{ dodone.name }}
+                    </div>
+                  </div>
+                </article>
               </div>
             </tr>
           </table>
         </div>
       </div>
+      <!-- End Done -->
     </div>
     <h1>Fixed Table header</h1>
     งานทั้งหมด : {{ count }} <br>
@@ -151,7 +169,7 @@ export default {
   },
   created () {
     let that = this
-    axios.get('https://graph.facebook.com/138501810233037?fields=feed&access_token=EAACEdEose0cBAM9Cszc6VZAtfPaXYBUCeGzuYbSMfbLi1pZAAL8cSBYZBMcoitwoZC4gBdokiSPsitu6l6OOnPfOEBx1mtI4c9KFEEm0Dq0cxmLQ1LjOvmFduMpswVLVPaZAAZBEvAoQUGwlPDdsuhFU6qq3H1iZB4lPVBiZCAZC1bqZCDoaTzbg9wJ5SgxKQre38ZD')
+    axios.get('https://graph.facebook.com/138501810233037?fields=feed&access_token=EAACEdEose0cBAK0POtZAQElkfbAyAiC0BfyP9ZBn2jyG4vcGMS5VBE80zHent0Yey7QiyhqI4yaAgVvEUzGFAs11vZBR9TM8Nr3fk7dpIa2xljMqm47xBzL9iJKkLqeoUdE5n9NTCu4Lf4ZAjurD0v8ynKOAAWY0LQ5Q6UGj8Mohs0NHZAbfY9wHU6mHFtHUZD')
     .then(response => {
       this.posts = response.data
       // console.log(this.posts.feed.data)
@@ -182,7 +200,7 @@ export default {
         }
       })
     })
-    axios.get('https://graph.facebook.com/138501810233037?fields=feed{comments}&access_token=EAACEdEose0cBAM9Cszc6VZAtfPaXYBUCeGzuYbSMfbLi1pZAAL8cSBYZBMcoitwoZC4gBdokiSPsitu6l6OOnPfOEBx1mtI4c9KFEEm0Dq0cxmLQ1LjOvmFduMpswVLVPaZAAZBEvAoQUGwlPDdsuhFU6qq3H1iZB4lPVBiZCAZC1bqZCDoaTzbg9wJ5SgxKQre38ZD')
+    axios.get('https://graph.facebook.com/138501810233037?fields=feed{comments}&access_token=EAACEdEose0cBAK0POtZAQElkfbAyAiC0BfyP9ZBn2jyG4vcGMS5VBE80zHent0Yey7QiyhqI4yaAgVvEUzGFAs11vZBR9TM8Nr3fk7dpIa2xljMqm47xBzL9iJKkLqeoUdE5n9NTCu4Lf4ZAjurD0v8ynKOAAWY0LQ5Q6UGj8Mohs0NHZAbfY9wHU6mHFtHUZD')
     .then(response => {
       this.comments = response.data
       // console.log(this.comments.feed.data[0].comments.data[0].from.name)
